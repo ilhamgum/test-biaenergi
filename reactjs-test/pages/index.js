@@ -1,118 +1,309 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
+import { useEffect, useRef, useState } from "react";
+import { AiOutlineEdit, AiOutlineLoading3Quarters } from "react-icons/ai";
 
-const inter = Inter({ subsets: ['latin'] })
+// utils
+import { formatTanggalInput, formatTanggalLahir } from "@/utils";
+
+// components
+import NoDataOnTable from "@/components/no-data";
+import UpdateLoading from "@/components/update-loading";
+import UserList from "@/components/user-list";
+import UserDetail from "@/components/user-detail";
+
+// const initialDummy = [
+//   {
+//     id: 1,
+//     nama: "Nama",
+//     alamat: "Alamat",
+//     jenis_kelamin: "P/W",
+//     tanggal_lahir: "29 03 2001",
+//     tanggal_input: "12/06/23 19:36:15",
+//   },
+// ];
 
 export default function Home() {
+  const [loading, setLoading] = useState(false);
+  const [users, setUsers] = useState([]);
+
+  // update data
+  const [showAddUser, setShowAddUser] = useState(false);
+  const [[showEditUser, showEditUserIndex], setShowEditUser] = useState([
+    false,
+    -1,
+  ]);
+
+  // modal
+  const [showModal, setShowModal] = useState(false);
+  const [modalUserDetail, setModalUserDetail] = useState({});
+
+  // input refs
+  const namaRef = useRef(null);
+  const alamatRef = useRef(null);
+  const jenisKelaminRef = useRef(null);
+  const tanggalLahirRef = useRef(null);
+  const tanggalInputRef = useRef(null);
+
+  const onAddUser = () => {
+    setLoading(true);
+
+    const nama = namaRef.current?.value;
+    const alamat = alamatRef.current?.value;
+    const jenisKelamin = jenisKelaminRef.current?.value;
+    const tanggalLahir = tanggalLahirRef.current?.value;
+    const tanggalInput = tanggalInputRef.current?.value;
+
+    setTimeout(() => {
+      console.log(
+        "add user",
+        nama,
+        alamat,
+        jenisKelamin,
+        tanggalLahir,
+        tanggalInput
+      );
+
+      // set user into array
+      setUsers([
+        ...users,
+        {
+          id: users.length + 1,
+          nama,
+          alamat,
+          jenis_kelamin: jenisKelamin,
+          tanggal_lahir: formatTanggalLahir(tanggalLahir),
+          tanggal_input: tanggalInput,
+        },
+      ]);
+
+      clearInputState();
+    }, 2000);
+  };
+
+  const onEditUser = () => {
+    setLoading(true);
+
+    const nama = namaRef.current?.value;
+    const alamat = alamatRef.current?.value;
+    const jenisKelamin = jenisKelaminRef.current?.value;
+    const tanggalLahir = tanggalLahirRef.current?.value;
+    const tanggalInput = tanggalInputRef.current?.value;
+
+    setTimeout(() => {
+      console.log(
+        "edit user",
+        nama,
+        alamat,
+        jenisKelamin,
+        tanggalLahir,
+        tanggalInput
+      );
+
+      // set user into array
+      const newUsers = [...users];
+
+      newUsers[showEditUserIndex] = {
+        ...newUsers[showEditUserIndex],
+        nama,
+        alamat,
+        jenis_kelamin: jenisKelamin,
+        tanggal_lahir: formatTanggalLahir(tanggalLahir),
+        tanggal_input: tanggalInput,
+      };
+
+      setUsers(newUsers);
+
+      clearInputState();
+    }, 2000);
+  };
+
+  const onDeleteUser = (index) => {
+    const newUsers = [...users];
+
+    newUsers.splice(index, 1);
+
+    setUsers(newUsers);
+
+    clearInputState();
+  };
+
+  const clearInputState = () => {
+    setShowAddUser(false);
+    setShowEditUser([false, -1]);
+    setLoading(false);
+  };
+
+  // detect if showAddUser is true, auto focus to input
+  useEffect(() => {
+    if (showAddUser) {
+      document.querySelector("input").focus();
+
+      // detect if esc key is pressed
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          setShowAddUser(false);
+        }
+      });
+    }
+  }, [showAddUser]);
+
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
-    >
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">pages/index.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
+    <main className="p-10">
+      <button
+        disabled={loading}
+        onClick={() => {
+          setShowAddUser(!showAddUser);
+          setShowEditUser([false, -1]);
+        }}
+        className="px-4 py-2 border border-black rounded-xl hover:bg-black hover:text-white duration-300"
+      >
+        Tambah User
+      </button>
+
+      <table className="w-full mt-5">
+        <thead>
+          <tr>
+            <th className="p-2 border border-black">No</th>
+            <th className="p-2 border border-black">Nama</th>
+            <th className="p-2 border border-black">Alamat</th>
+            <th className="p-2 border border-black">P/W</th>
+            <th className="p-2 border border-black">Tanggal Lahir</th>
+            <th className="p-2 border border-black">Tanggal Input</th>
+            <th className="p-2 border border-black">Aksi</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {loading ? (
+            <UpdateLoading />
+          ) : (
+            <>
+              {showAddUser || showEditUser ? (
+                <tr>
+                  <td className="p-2 border border-black">
+                    {showEditUser ? (
+                      <p className="select-none text-center">
+                        <AiOutlineEdit />
+                      </p>
+                    ) : (
+                      <p className="select-none text-center">
+                        {users.length + 1}
+                      </p>
+                    )}
+                  </td>
+
+                  <td className="p-2 border border-black">
+                    <input
+                      ref={namaRef}
+                      type="text"
+                      className="p-2 w-full h-full outline-none"
+                      value={namaRef.current?.value}
+                    />
+                  </td>
+
+                  <td className="p-2 border border-black">
+                    <input
+                      ref={alamatRef}
+                      type="text"
+                      className="p-2 w-full h-full outline-none"
+                      value={alamatRef.current?.value}
+                    />
+                  </td>
+
+                  <td className="p-2 border border-black">
+                    <select
+                      ref={jenisKelaminRef}
+                      className="p-2 w-full h-full"
+                      value={jenisKelaminRef.current?.value}
+                    >
+                      <option value="Pria">Pria</option>
+                      <option value="Wanita">Wanita</option>
+                    </select>
+                  </td>
+
+                  <td className="p-2 border border-black">
+                    <input
+                      ref={tanggalLahirRef}
+                      type="date"
+                      className="p-2 w-full h-full outline-none"
+                      value={tanggalLahirRef.current?.value}
+                    />
+                  </td>
+
+                  <td className="p-2 border border-black">
+                    <input
+                      disabled
+                      ref={tanggalInputRef}
+                      type="text"
+                      className="p-2 w-full h-full outline-none"
+                      value={formatTanggalInput(new Date())}
+                    />
+                  </td>
+
+                  {/* buttons */}
+                  {showAddUser && !showEditUser ? (
+                    <td className="p-2 flex justify-center items-center space-x-2 border border-black">
+                      <button
+                        onClick={onAddUser}
+                        className="px-4 py-2 border border-black rounded-xl hover:bg-black hover:text-white duration-300"
+                      >
+                        Add
+                      </button>
+
+                      <button
+                        onClick={() => setShowAddUser(false)}
+                        className="px-4 py-2 border border-black rounded-xl hover:bg-black hover:text-white duration-300"
+                      >
+                        Cancel
+                      </button>
+                    </td>
+                  ) : (
+                    <td className="p-2 flex justify-center items-center space-x-2 border border-black">
+                      <button
+                        onClick={onEditUser}
+                        className="px-4 py-2 border border-black rounded-xl hover:bg-black hover:text-white duration-300"
+                      >
+                        Save
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setShowEditUser([false, -1]);
+                        }}
+                        className="px-4 py-2 border border-black rounded-xl hover:bg-black hover:text-white duration-300"
+                      >
+                        Cancel
+                      </button>
+                    </td>
+                  )}
+                </tr>
+              ) : null}
+            </>
+          )}
+
+          {users.length ? (
+            <UserList
+              users={users}
+              onView={setShowModal}
+              onViewUserDetail={setModalUserDetail}
+              onEdit={setShowEditUser}
+              isEditing={showEditUser}
+              isEditingIndex={showEditUserIndex}
+              onDelete={onDeleteUser}
+              showAddUser={showAddUser}
+              setShowAddUser={setShowAddUser}
             />
-          </a>
-        </div>
-      </div>
+          ) : (
+            <NoDataOnTable />
+          )}
+        </tbody>
+      </table>
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Discover and deploy boilerplate example Next.js&nbsp;projects.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      {/* user detail modal */}
+      <UserDetail
+        open={showModal}
+        close={setShowModal}
+        userDetails={modalUserDetail}
+      />
     </main>
-  )
+  );
 }
