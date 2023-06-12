@@ -174,13 +174,17 @@ export default function Home() {
         <table className="w-full mt-5">
           <thead>
             <tr>
-              <th className="p-2 border border-black">No</th>
-              <th className="p-2 border border-black">Nama</th>
-              <th className="p-2 border border-black">Alamat</th>
-              <th className="p-2 border border-black">P/W</th>
-              <th className="p-2 border border-black">Tanggal Lahir</th>
-              <th className="p-2 border border-black">Tanggal Input</th>
-              <th className="p-2 border border-black">Aksi</th>
+              <th className="p-2 border border-black rounded-xl">No</th>
+              <th className="p-2 border border-black rounded-xl">Nama</th>
+              <th className="p-2 border border-black rounded-xl">Alamat</th>
+              <th className="p-2 border border-black rounded-xl">P/W</th>
+              <th className="p-2 border border-black rounded-xl">
+                Tanggal Lahir
+              </th>
+              <th className="p-2 border border-black rounded-xl">
+                Tanggal Input
+              </th>
+              <th className="p-2 border border-black rounded-xl">Aksi</th>
             </tr>
           </thead>
 
