@@ -22,7 +22,21 @@ for running the CountLetterInParagraf.js test
 
 Terletak pada folter `./reactjs-test`
 
-go the directory:
+if you on root
+
+run:
+
+```
+yarn install-directly
+```
+
+then run this to start dev server:
+
+```
+yarn dev
+```
+
+or go the directory:
 
 ```
 cd .\reactjs-test\

@@ -155,14 +155,14 @@ export default function Home() {
       </Head>
 
       {/* main content */}
-      <main className="p-10">
+      <main className="min-h-[100dvh]  background-with-image bg-no-repeat bg-cover p-10">
         <button
           disabled={loading}
           onClick={() => {
             setShowAddUser(!showAddUser);
             setShowEditUser([false, -1]);
           }}
-          className="px-4 py-2 border border-black rounded-xl hover:bg-black hover:text-white duration-300"
+          className="px-4 py-2 border-2 text-white border-white rounded-xl hover:bg-white hover:text-black duration-300"
         >
           {loading ? (
             <AiOutlineLoading3Quarters className="animate-spin" />
@@ -171,148 +171,164 @@ export default function Home() {
           )}
         </button>
 
-        <table className="w-full mt-5">
-          <thead>
-            <tr>
-              <th className="p-2 border border-black rounded-xl">No</th>
-              <th className="p-2 border border-black rounded-xl">Nama</th>
-              <th className="p-2 border border-black rounded-xl">Alamat</th>
-              <th className="p-2 border border-black rounded-xl">P/W</th>
-              <th className="p-2 border border-black rounded-xl">
-                Tanggal Lahir
-              </th>
-              <th className="p-2 border border-black rounded-xl">
-                Tanggal Input
-              </th>
-              <th className="p-2 border border-black rounded-xl">Aksi</th>
-            </tr>
-          </thead>
+        <div className="mt-5 p-4 border card">
+          <table className="w-full">
+            <thead>
+              <tr>
+                <th className="p-2 border-2 text-white border-white rounded-xl">
+                  No
+                </th>
+                <th className="p-2 border-2 text-white border-white rounded-xl">
+                  Nama
+                </th>
+                <th className="p-2 border-2 text-white border-white rounded-xl">
+                  Alamat
+                </th>
+                <th className="p-2 border-2 text-white border-white rounded-xl">
+                  P/W
+                </th>
+                <th className="p-2 border-2 text-white border-white rounded-xl">
+                  Tanggal Lahir
+                </th>
+                <th className="p-2 border-2 text-white border-white rounded-xl">
+                  Tanggal Input
+                </th>
+                <th className="p-2 border-2 text-white border-white rounded-xl">
+                  Aksi
+                </th>
+              </tr>
+            </thead>
 
-          <tbody>
-            {loading ? (
-              <UpdateLoading />
-            ) : (
-              <>
-                {showAddUser || showEditUser ? (
-                  <tr>
-                    <td className="p-2 border border-black">
-                      {showEditUser ? (
-                        <p className="select-none text-center">
-                          <AiOutlineEdit />
-                        </p>
+            <tbody>
+              {loading ? (
+                <UpdateLoading />
+              ) : (
+                <>
+                  {showAddUser || showEditUser ? (
+                    <tr>
+                      <td className="p-2 border-2 border-white text-white">
+                        {showEditUser ? (
+                          <p className="select-none text-center">
+                            <AiOutlineEdit />
+                          </p>
+                        ) : (
+                          <p className="select-none text-center">
+                            {users.length + 1}
+                          </p>
+                        )}
+                      </td>
+
+                      <td className="p-2 border-2 border-white text-white">
+                        <input
+                          ref={namaRef}
+                          type="text"
+                          className="p-2 w-full h-full outline-none bg-transparent"
+                          value={namaRef.current?.value}
+                        />
+                      </td>
+
+                      <td className="p-2 border-2 border-white text-white">
+                        <input
+                          ref={alamatRef}
+                          type="text"
+                          className="p-2 w-full h-full outline-none bg-transparent"
+                          value={alamatRef.current?.value}
+                        />
+                      </td>
+
+                      <td className="p-2 border-2 border-white text-white">
+                        <select
+                          ref={jenisKelaminRef}
+                          className="p-2 w-full h-full bg-transparent"
+                          value={jenisKelaminRef.current?.value}
+                        >
+                          <option value="Pria" className="text-black">
+                            Pria
+                          </option>
+                          <option value="Wanita" className="text-black">
+                            Wanita
+                          </option>
+                        </select>
+                      </td>
+
+                      <td className="p-2 border-2 border-white text-white">
+                        <input
+                          ref={tanggalLahirRef}
+                          type="date"
+                          className="p-2 w-full h-full outline-none bg-transparent"
+                          value={tanggalLahirRef.current?.value}
+                        />
+                      </td>
+
+                      <td className="p-2 border-2 border-white text-white">
+                        <input
+                          disabled
+                          ref={tanggalInputRef}
+                          type="text"
+                          className="p-2 w-full h-full outline-none bg-transparent"
+                          value={formatTanggalInput(new Date())}
+                        />
+                      </td>
+
+                      {/* buttons */}
+                      {showAddUser && !showEditUser ? (
+                        <td className="p-2 flex justify-center items-center space-x-2 border-2 border-white text-white">
+                          <button
+                            onClick={onAddUser}
+                            className="px-4 py-2 border-2 text-white border-white rounded-xl hover:bg-black hover:text-white duration-300"
+                          >
+                            Add
+                          </button>
+
+                          <button
+                            onClick={() => setShowAddUser(false)}
+                            className="px-4 py-2 border-2 text-white border-white rounded-xl hover:bg-black hover:text-white duration-300"
+                          >
+                            Cancel
+                          </button>
+                        </td>
                       ) : (
-                        <p className="select-none text-center">
-                          {users.length + 1}
-                        </p>
+                        <td className="p-2 flex justify-center items-center space-x-2 border-2 border-white text-white">
+                          <button
+                            onClick={onEditUser}
+                            className="px-4 py-2 border-2 text-white border-white rounded-xl hover:bg-black hover:text-white duration-300"
+                          >
+                            Save
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              setShowEditUser([false, -1]);
+                            }}
+                            className="px-4 py-2 border-2 text-white border-white rounded-xl hover:bg-black hover:text-white duration-300"
+                          >
+                            Cancel
+                          </button>
+                        </td>
                       )}
-                    </td>
+                    </tr>
+                  ) : null}
+                </>
+              )}
 
-                    <td className="p-2 border border-black">
-                      <input
-                        ref={namaRef}
-                        type="text"
-                        className="p-2 w-full h-full outline-none"
-                        value={namaRef.current?.value}
-                      />
-                    </td>
-
-                    <td className="p-2 border border-black">
-                      <input
-                        ref={alamatRef}
-                        type="text"
-                        className="p-2 w-full h-full outline-none"
-                        value={alamatRef.current?.value}
-                      />
-                    </td>
-
-                    <td className="p-2 border border-black">
-                      <select
-                        ref={jenisKelaminRef}
-                        className="p-2 w-full h-full"
-                        value={jenisKelaminRef.current?.value}
-                      >
-                        <option value="Pria">Pria</option>
-                        <option value="Wanita">Wanita</option>
-                      </select>
-                    </td>
-
-                    <td className="p-2 border border-black">
-                      <input
-                        ref={tanggalLahirRef}
-                        type="date"
-                        className="p-2 w-full h-full outline-none"
-                        value={tanggalLahirRef.current?.value}
-                      />
-                    </td>
-
-                    <td className="p-2 border border-black">
-                      <input
-                        disabled
-                        ref={tanggalInputRef}
-                        type="text"
-                        className="p-2 w-full h-full outline-none"
-                        value={formatTanggalInput(new Date())}
-                      />
-                    </td>
-
-                    {/* buttons */}
-                    {showAddUser && !showEditUser ? (
-                      <td className="p-2 flex justify-center items-center space-x-2 border border-black">
-                        <button
-                          onClick={onAddUser}
-                          className="px-4 py-2 border border-black rounded-xl hover:bg-black hover:text-white duration-300"
-                        >
-                          Add
-                        </button>
-
-                        <button
-                          onClick={() => setShowAddUser(false)}
-                          className="px-4 py-2 border border-black rounded-xl hover:bg-black hover:text-white duration-300"
-                        >
-                          Cancel
-                        </button>
-                      </td>
-                    ) : (
-                      <td className="p-2 flex justify-center items-center space-x-2 border border-black">
-                        <button
-                          onClick={onEditUser}
-                          className="px-4 py-2 border border-black rounded-xl hover:bg-black hover:text-white duration-300"
-                        >
-                          Save
-                        </button>
-
-                        <button
-                          onClick={() => {
-                            setShowEditUser([false, -1]);
-                          }}
-                          className="px-4 py-2 border border-black rounded-xl hover:bg-black hover:text-white duration-300"
-                        >
-                          Cancel
-                        </button>
-                      </td>
-                    )}
-                  </tr>
-                ) : null}
-              </>
-            )}
-
-            {users.length ? (
-              <UserList
-                users={users}
-                onView={setShowModal}
-                onViewUserDetail={setModalUserDetail}
-                onEdit={setShowEditUser}
-                isEditing={showEditUser}
-                isEditingIndex={showEditUserIndex}
-                onDelete={onDeleteUser}
-                showAddUser={showAddUser}
-                setShowAddUser={setShowAddUser}
-              />
-            ) : (
-              <NoDataOnTable />
-            )}
-          </tbody>
-        </table>
+              {users.length ? (
+                <UserList
+                  users={users}
+                  onView={setShowModal}
+                  onViewUserDetail={setModalUserDetail}
+                  onEdit={setShowEditUser}
+                  isEditing={showEditUser}
+                  isEditingIndex={showEditUserIndex}
+                  onDelete={onDeleteUser}
+                  showAddUser={showAddUser}
+                  setShowAddUser={setShowAddUser}
+                />
+              ) : (
+                <NoDataOnTable />
+              )}
+            </tbody>
+          </table>
+        </div>
 
         {/* user detail modal */}
         <UserDetail

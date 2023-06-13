@@ -1,0 +1,12 @@
+{
+  "name": "test-biaenergi",
+  "version": "1.0.0",
+  "description": "Terletak pada folder `./logic-test`",
+  "main": "index.js",
+  "scripts": {
+    "dev": "cd ./reactjs-test/ && yarn dev",
+    "install-directly": "cd ./reactjs-test/ && yarn install"
+  },
+  "author": "",
+  "license": "ISC"
+}

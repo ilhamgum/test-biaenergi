@@ -15,15 +15,21 @@ export default function UserList({
       key={index}
       className={`${isEditingIndex == index ? "bg-black/50" : ""}`}
     >
-      <td className="p-2 border border-black">{user.id}</td>
-      <td className="p-2 border border-black">{user.nama}</td>
-      <td className="p-2 border border-black">{user.alamat}</td>
-      <td className="p-2 border border-black">{user.jenis_kelamin}</td>
-      <td className="p-2 border border-black">{user.tanggal_lahir}</td>
-      <td className="p-2 border border-black">{user.tanggal_input}</td>
+      <td className="p-2 border-2 border-white text-white">{user.id}</td>
+      <td className="p-2 border-2 border-white text-white">{user.nama}</td>
+      <td className="p-2 border-2 border-white text-white">{user.alamat}</td>
+      <td className="p-2 border-2 border-white text-white">
+        {user.jenis_kelamin}
+      </td>
+      <td className="p-2 border-2 border-white text-white">
+        {user.tanggal_lahir}
+      </td>
+      <td className="p-2 border-2 border-white text-white">
+        {user.tanggal_input}
+      </td>
 
       {/* buttons */}
-      <td className="p-2 border border-black">
+      <td className="p-2 border-2 border-white text-white">
         <div className="flex justify-center items-center space-x-2">
           <button
             onClick={() => {
