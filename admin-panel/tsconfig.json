@@ -15,7 +15,14 @@
     "jsx": "preserve",
     "incremental": true,
     "paths": {
-      "@/*": ["./*"]
+      "@components/*": ["./components/*"],
+      "@authContext": ["./context/index.tsx"],
+      "@context/*": ["./context/*"],
+      "@layout": ["./layout/index.tsx"],
+      "@services/*": ["./services/*"],
+      "@styles/*": ["./styles/*"],
+      "@utils/*": ["./utils/*"],
+      "@types": ["./types.ts"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
