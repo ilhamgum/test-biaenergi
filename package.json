@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "cd ./reactjs-test/ && yarn dev",
-    "install-directly": "cd ./reactjs-test/ && yarn install"
+    "install-directly": "cd ./reactjs-test/ && yarn install",
+    "dev-admin": "cd ./admin-panel/ && yarn dev",
+    "install-directly-admin": "cd ./admin-panel/ && yarn install"
   },
   "author": "",
   "license": "ISC"
