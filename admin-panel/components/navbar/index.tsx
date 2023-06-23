@@ -11,7 +11,9 @@ export default function Navbar() {
   };
 
   return (
-    <div className="h-[50px]">
+    <div className="h-[50px] flex justify-between items-center px-4 py-2">
+      <h1>Navbar</h1>
+
       <button onClick={handleLogout}>Logout</button>
     </div>
   );
